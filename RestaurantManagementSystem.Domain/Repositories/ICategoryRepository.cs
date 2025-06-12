@@ -1,4 +1,4 @@
-﻿using RestaurantManagementSystem.Domain.Entites;
+﻿using RestaurantManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

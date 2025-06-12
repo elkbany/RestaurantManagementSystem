@@ -6,12 +6,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestaurantManagementSystem.Domain.Entites
+namespace RestaurantManagementSystem.Domain.Entities
 {
     public class Order
     {
         public int Id { get; set; }
-        //public int CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public OrderType OrderType { get; set; }
         public OrderStatus Status { get; set; }
         public string? DeliveryAddress { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RestaurantManagementSystem.Domain.Entites
+namespace RestaurantManagementSystem.Domain.Entities
 {
     public class MenuItem
     {
@@ -10,7 +10,7 @@ namespace RestaurantManagementSystem.Domain.Entites
         public decimal Price { get; set; } 
         public bool IsAvailable { get; set; } 
         public int CategoryId { get; set; }     
-        public Category category { get; set; }
+        public Category Category { get; set; }
         public int DailyOrderCount { get; set; }
         public int PreparationTime { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }

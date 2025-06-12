@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestaurantManagementSystem.Domain.Entites
+namespace RestaurantManagementSystem.Domain.Entities
 {
     public class OrderItem
     {
