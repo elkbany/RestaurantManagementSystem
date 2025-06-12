@@ -1,6 +1,8 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
+using RestaurantManagementSystem.Application.Contracts;
 using RestaurantManagementSystem.Application.Mapping;
+using RestaurantManagementSystem.Application.Services;
 using RestaurantManagementSystem.Domain.Repositories;
 using RestaurantManagementSystem.Infrastructure.Context;
 using RestaurantManagementSystem.Infrastructure.Implementations.Base;
@@ -19,6 +21,8 @@ builder.Services.AddDbContext<RestaurantDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IServiceManager, ServiceManager>();
+
 
 var app = builder.Build();
 
