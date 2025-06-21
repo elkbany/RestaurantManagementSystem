@@ -33,6 +33,9 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -46,19 +49,15 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Starters",
-                            Name = "Appetizers"
+                            Description = "Main course items",
+                            IsActive = true,
+                            Name = "Main Dishes"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Entrees",
-                            Name = "Main Courses"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Sweet Treats",
+                            Description = "Sweet treats",
+                            IsActive = true,
                             Name = "Desserts"
                         });
                 });
@@ -76,6 +75,10 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
 
                     b.Property<int>("DailyOrderCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAvailable")
                         .ValueGeneratedOnAdd()
@@ -111,30 +114,22 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                             Id = 1,
                             CategoryId = 1,
                             DailyOrderCount = 0,
+                            ImageUrl = "",
                             IsAvailable = true,
-                            Name = "Spring Rolls",
-                            PreparationTime = 10,
-                            Price = 5.99m
+                            Name = "Pizza",
+                            PreparationTime = 20,
+                            Price = 10.00m
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 2,
                             DailyOrderCount = 0,
+                            ImageUrl = "",
                             IsAvailable = true,
-                            Name = "Grilled Chicken",
-                            PreparationTime = 20,
-                            Price = 12.99m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 3,
-                            DailyOrderCount = 0,
-                            IsAvailable = true,
-                            Name = "Chocolate Cake",
-                            PreparationTime = 5,
-                            Price = 6.49m
+                            Name = "Cake",
+                            PreparationTime = 15,
+                            Price = 5.00m
                         });
                 });
 
@@ -153,12 +148,18 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<DateTime?>("EstimatedDeliveryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("OrderType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StaffId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -169,6 +170,8 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("StaffId");
+
                     b.ToTable("Orders", (string)null);
 
                     b.HasData(
@@ -176,10 +179,11 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            OrderType = 0,
+                            DeliveryAddress = "123 Main St",
+                            OrderDate = new DateTime(2025, 6, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderType = 2,
                             Status = 0,
-                            Total = 0m
+                            Total = 25.00m
                         });
                 });
 
@@ -205,6 +209,141 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                     b.HasIndex("MenuItemId");
 
                     b.ToTable("OrderItems", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = 1,
+                            MenuItemId = 1,
+                            Id = 1,
+                            Quantity = 2,
+                            Subtotal = 20.00m
+                        },
+                        new
+                        {
+                            OrderId = 1,
+                            MenuItemId = 2,
+                            Id = 2,
+                            Quantity = 1,
+                            Subtotal = 5.00m
+                        });
+                });
+
+            modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Reservation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PartySize")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReservationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TableId");
+
+                    b.ToTable("Reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerName = "Ali",
+                            PartySize = 3,
+                            ReservationDateTime = new DateTime(2025, 6, 21, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            TableId = 3
+                        });
+                });
+
+            modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Staff", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Staff");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mohamed",
+                            Role = "Waiter"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Ahmed",
+                            Role = "Chef"
+                        });
+                });
+
+            modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Table", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsReserved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ReservationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TableNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tables");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            Capacity = 4,
+                            IsReserved = false,
+                            TableNumber = "T01"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Capacity = 6,
+                            IsReserved = false,
+                            TableNumber = "T02"
+                        });
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.MenuItem", b =>
@@ -216,6 +355,14 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("RestaurantManagementSystem.Domain.Entities.Staff", null)
+                        .WithMany("AssignedOrders")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.OrderItem", b =>
@@ -237,6 +384,17 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Reservation", b =>
+                {
+                    b.HasOne("RestaurantManagementSystem.Domain.Entities.Table", "Table")
+                        .WithMany("Reservations")
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Table");
+                });
+
             modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Category", b =>
                 {
                     b.Navigation("MenuItems");
@@ -250,6 +408,16 @@ namespace RestaurantManagementSystem.Infrastructure.Migrations
             modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Staff", b =>
+                {
+                    b.Navigation("AssignedOrders");
+                });
+
+            modelBuilder.Entity("RestaurantManagementSystem.Domain.Entities.Table", b =>
+                {
+                    b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618
         }

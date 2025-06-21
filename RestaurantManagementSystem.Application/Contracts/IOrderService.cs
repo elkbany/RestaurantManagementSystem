@@ -1,4 +1,6 @@
 ﻿using RestaurantManagementSystem.Application.DTOs.Order;
+using RestaurantManagementSystem.Domain.Entities;
+using RestaurantManagementSystem.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace RestaurantManagementSystem.Application.Contracts
         public Task<OrderDto> GetOrderByIdAsync(int id);
         public Task AddOrderAsync(OrderDto orderDto);
         public Task UpdateOrderAsync(int id, OrderDto orderDto);
-        public Task DeleteOrderAsync(int id);
+        public Task<(bool Success, string Message, OrderDto Order)> DeleteOrderAsync(int id);
+        public  Task<Dictionary<string, decimal>> GetSalesAnalyticsAsync(CancellationToken cancellationToken = default);
     }
 }

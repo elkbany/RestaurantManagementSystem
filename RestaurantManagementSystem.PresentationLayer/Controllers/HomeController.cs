@@ -1,32 +1,32 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantManagementSystem.Application.Contracts;
 using RestaurantManagementSystem.PresentationLayer.Models;
+using System.Diagnostics;
 
 namespace RestaurantManagementSystem.PresentationLayer.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IServiceManager _serviceManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IServiceManager serviceManager)
         {
-            _logger = logger;
+            _serviceManager = serviceManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Await the tasks to get the IEnumerable results
+            var tables = await _serviceManager.TableService.GetAllTablesAsync();
+            var orders = await _serviceManager.OrderService.GetAllOrdersAsync();
+            var staff = await _serviceManager.StaffService.GetAllStaffAsync();
+
+            // Use CountAsync on the awaited results
+            ViewBag.TableCount = await Task.FromResult(tables.Count());
+            ViewBag.OrderCount = await Task.FromResult(orders.Count());
+            ViewBag.StaffCount = await Task.FromResult(staff.Count());
+
             return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

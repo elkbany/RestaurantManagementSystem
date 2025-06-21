@@ -1,0 +1,71 @@
+﻿@model RestaurantManagementSystem.Application.DTOs.MenuItem.MenuItemDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Edit Menu Item";
+    var categories = ViewBag.Categories as List<SelectListItem> ?? new List<SelectListItem>();
+}
+
+<h2 class="mb-4 text-primary"><i class="fas fa-utensils"></i> Edit Menu Item</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div class="card shadow-sm border-0" style="border-radius: 10px;">
+        <div class="card-header bg-light">
+            <h4>Item Details</h4>
+        </div>
+        <div class="card-body">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Price" class="form-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="IsAvailable" class="form-label"></label>
+                <input asp-for="IsAvailable" type="checkbox" />
+                <span asp-validation-for="IsAvailable" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="PreparationTime" class="form-label"></label>
+                <input asp-for="PreparationTime" class="form-control" />
+                <span asp-validation-for="PreparationTime" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="CategoryName" class="form-label"></label>
+                <select asp-for="CategoryName" class="form-control" asp-items="categories">
+                    <option value="">Select a Category</option>
+                </select>
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ImageUrl" class="form-label">Image URL or Upload</label>
+                <input asp-for="ImageUrl" class="form-control mb-2" />
+                <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.Name" style="max-height: 150px; margin-top: 10px; border-radius: 5px;">
+                }
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left"></i> Back to List</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

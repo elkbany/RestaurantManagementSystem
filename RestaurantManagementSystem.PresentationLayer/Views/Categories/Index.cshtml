@@ -1,37 +1,47 @@
-﻿@using RestaurantManagementSystem.Application.DTOs.Category
-@model IEnumerable<CategoryDto>
+﻿@model IEnumerable<RestaurantManagementSystem.Application.DTOs.Category.CategoryDto>
 
 @{
     ViewData["Title"] = "Categories";
 }
 
-<h2>Categories</h2>
+<h2 class="mb-4 text-primary text-center"><i class="fas fa-list"></i> Categories List</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Name</td>
-                <td>@item.Description</td>
-                <td>
-                    <a class="btn btn-primary " asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<a asp-action="Create" class="btn btn-success mb-3"><i class="fas fa-plus"></i> Add New Category</a>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning text-center">No active categories found.</div>
+}
+else
+{
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0" style="border-radius: 10px; transition: transform 0.2s;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-primary">@item.Name</h5>
+                            <p class="card-text flex-grow-1">Items: @item.MenuItemCount</p>
+                            <p class="card-text flex-grow-1">@(string.IsNullOrEmpty(item.Description) ? "No description" : item.Description)</p>
+                            <div class="mt-auto d-flex gap-2">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Details</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                <form asp-action="Delete" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i> Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<style>
+    .card:hover {
+        transform: scale(1.02);
+    }
+</style>

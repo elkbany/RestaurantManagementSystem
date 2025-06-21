@@ -1,0 +1,23 @@
+﻿@model RestaurantManagementSystem.Application.DTOs.Table.TableDto
+
+@{
+    ViewData["Title"] = "Table Details";
+}
+
+<h2>Table Details</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.TableNumber)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.TableNumber)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Capacity)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Capacity)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.IsReserved)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.IsReserved)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ReservationTime)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.ReservationTime)</dd>
+    </dl>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+</div>

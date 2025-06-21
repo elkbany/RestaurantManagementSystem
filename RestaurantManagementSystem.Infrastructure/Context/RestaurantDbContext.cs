@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantManagementSystem.Domain.Entities;
 using RestaurantManagementSystem.Domain.Enums;
+using RestaurantManagementSystem.Infrastructure.Data.Seeder;
 
 namespace RestaurantManagementSystem.Infrastructure.Context
 {
@@ -10,6 +11,9 @@ namespace RestaurantManagementSystem.Infrastructure.Context
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Table> Tables { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Staff> Staff { get; set; }
 
         public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options)
             : base(options)
@@ -75,27 +79,47 @@ namespace RestaurantManagementSystem.Infrastructure.Context
                        .HasForeignKey(oi => oi.MenuItemId)
                        .OnDelete(DeleteBehavior.Restrict);
             });
+            modelBuilder.Entity<Table>()
+                .HasMany(t => t.Reservations)
+                .WithOne(r => r.Table)
+                .HasForeignKey(r => r.TableId);
+
+            modelBuilder.Entity<Staff>()
+                .HasMany(s => s.AssignedOrders)
+                .WithOne()
+                .HasForeignKey("StaffId") // Adjust based on your Order model
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 
-            // Categories Data Seeding
-            modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, Name = "Appetizers", Description = "Starters" },
-                new Category { Id = 2, Name = "Main Courses", Description = "Entrees" },
-                new Category { Id = 3, Name = "Desserts", Description = "Sweet Treats" }
-            );
+            //// Categories Data Seeding
+            //modelBuilder.Entity<Category>().HasData(
+            //    new Category { Id = 1, Name = "Appetizers", Description = "Starters" },
+            //    new Category { Id = 2, Name = "Main Courses", Description = "Entrees" },
+            //    new Category { Id = 3, Name = "Desserts", Description = "Sweet Treats" }
+            //);
 
-            // MenuItems Data Seeding 
-            modelBuilder.Entity<MenuItem>().HasData(
-                new MenuItem { Id = 1, Name = "Spring Rolls", Price = 5.99m, IsAvailable = true, PreparationTime = 10, CategoryId = 1 },
-                new MenuItem { Id = 2, Name = "Grilled Chicken", Price = 12.99m, IsAvailable = true, PreparationTime = 20, CategoryId = 2 },
-                new MenuItem { Id = 3, Name = "Chocolate Cake", Price = 6.49m, IsAvailable = true, PreparationTime = 5, CategoryId = 3 }
-            );
+            //// MenuItems Data Seeding 
+            //modelBuilder.Entity<MenuItem>().HasData(
+            //    new MenuItem { Id = 1, Name = "Spring Rolls", Price = 5.99m, IsAvailable = true, PreparationTime = 10, CategoryId = 1 },
+            //    new MenuItem { Id = 2, Name = "Grilled Chicken", Price = 12.99m, IsAvailable = true, PreparationTime = 20, CategoryId = 2 },
+            //    new MenuItem { Id = 3, Name = "Chocolate Cake", Price = 6.49m, IsAvailable = true, PreparationTime = 5, CategoryId = 3 }
+            //);
 
-            // Orders Data Seeding 
-            modelBuilder.Entity<Order>().HasData(
-                new Order { Id = 1, CustomerId = 1, Status = OrderStatus.Pending, OrderDate = new DateTime(2025, 6, 12) } // تاريخ ثابت
-            );
+            //// Orders Data Seeding 
+            //modelBuilder.Entity<Order>().HasData(
+            //    new Order { Id = 1, CustomerId = 1, Status = OrderStatus.Pending, OrderDate = new DateTime(2025, 6, 12) } // تاريخ ثابت
+            //);
+
+
+            //// Order Items Data Seeding 
+            //modelBuilder.Entity<OrderItem>().HasData(
+            //    new OrderItem { OrderId = 1, MenuItemId = 1, Quantity = 2, Subtotal = 20.00m }, // Pizza
+            //    new OrderItem { OrderId = 1, MenuItemId = 2, Quantity = 1, Subtotal = 5.00m }   // Cake
+            //);
+
+            DataSeeder.SeedData(modelBuilder); // Data seeding
+
         }
     }
 }

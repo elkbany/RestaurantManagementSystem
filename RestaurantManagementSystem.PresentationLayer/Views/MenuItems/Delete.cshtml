@@ -1,0 +1,29 @@
+﻿@model RestaurantManagementSystem.Application.DTOs.MenuItem.MenuItemDto
+@{
+    ViewData["Title"] = "Delete Menu Item";
+}
+
+<h2 class="mb-4 text-primary"><i class="fas fa-utensils"></i> Delete Menu Item</h2>
+
+<h3 class="text-danger">Are you sure you want to delete "@Model.Name"?</h3>
+
+<div class="card shadow-sm border-0" style="border-radius: 10px;">
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <img src="@Model.ImageUrl" class="card-img-top" alt="@Model.Name" style="height: 200px; object-fit: cover; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+    }
+    <div class="card-body">
+        <p class="card-text"><strong>Price:</strong> $@Model.Price</p>
+        <p class="card-text"><strong>Category:</strong> @Model.CategoryName</p>
+        <p class="card-text"><strong>Preparation Time:</strong> @Model.PreparationTime min</p>
+        <p class="card-text"><strong>Orders Today:</strong> @Model.DailyOrderCount</p>
+        <p class="card-text"><strong>Availability:</strong> <span class="badge @((Model.IsAvailable) ? "bg-success" : "bg-danger")">@(Model.IsAvailable ? "Available" : "Unavailable")</span></p>
+    </div>
+    <div class="card-footer bg-light">
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left"></i> Cancel</a>
+        </form>
+    </div>
+</div>

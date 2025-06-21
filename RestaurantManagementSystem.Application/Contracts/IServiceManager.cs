@@ -11,5 +11,7 @@ namespace RestaurantManagementSystem.Application.Contracts
         public ICategoryService CategoryService { get; }
         public IMenuItemService MenuItemService { get; }
         public IOrderService OrderService { get; }
+        public ITableService TableService { get; }
+        public IStaffService StaffService { get; }
     }
 }

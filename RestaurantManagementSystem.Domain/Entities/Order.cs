@@ -16,6 +16,7 @@ namespace RestaurantManagementSystem.Domain.Entities
         public OrderStatus Status { get; set; }
         public string? DeliveryAddress { get; set; }
         public decimal Total { get; set; }
+        public DateTime? EstimatedDeliveryTime { get; set; } 
         public DateTime OrderDate { get; set; } = DateTime.Now;
         public ICollection<OrderItem> OrderItems { get; set; }
     }

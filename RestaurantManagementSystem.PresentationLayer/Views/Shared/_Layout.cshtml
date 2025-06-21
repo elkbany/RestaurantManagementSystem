@@ -3,50 +3,190 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AdminPanel</title>
+    <title>@ViewData["Title"] - Admin Panel</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RestaurantManagementSystem.PresentationLayer.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #2c3e50;
+            padding-top: 20px;
+            transition: all 0.3s;
+            color: #fff;
+            width: 260px; /* Slightly wider for better look */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Add shadow for separation */
+        }
+
+            .sidebar .nav-link {
+                color: #ecf0f1;
+                padding: 10px 20px; /* More padding for better spacing */
+                border-radius: 5px;
+                display: block;
+                cursor: pointer;
+            }
+
+                .sidebar .nav-link:hover {
+                    background-color: #34495e;
+                    color: #fff;
+                }
+
+            .sidebar .navbar-brand {
+                color: #fff;
+                font-weight: bold;
+                padding: 15px 20px;
+                font-size: 1.6rem;
+                background-color: #233140;
+                display: block;
+                text-align: center;
+                margin-bottom: 20px; /* Space after brand */
+            }
+
+        .content {
+            padding: 20px;
+            min-height: 100vh;
+            background-color: #f4f6f9;
+            transition: margin-left 0.3s;
+        }
+
+        .card-custom {
+            border: none;
+            transition: transform 0.2s;
+        }
+
+            .card-custom:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+
+        .crud-buttons {
+            display: none;
+            padding-left: 40px; /* More padding for submenu */
+            margin-top: 5px;
+        }
+
+        .crud-btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 5px;
+            text-align: left;
+            padding: 5px 15px;
+            background-color: #34495e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+            .crud-btn:hover {
+                background-color: #465c71;
+            }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AdminPanel</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="">Categories</a>
-                        </li>
-                    </ul>
+    <div class="d-flex flex-column flex-md-row">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+                    <a class="navbar-brand" href="#">Admin Panel</a>
+            <nav class="navbar navbar-expand-md navbar-light">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" id="sidebarToggle">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a>
+                                <div class="crud-buttons">
+                                    <a class="crud-btn" asp-action="Index" asp-controller="Home"><i class="fas fa-eye"></i> View</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index"><i class="fas fa-list"></i> Categories</a>
+                                <div class="crud-buttons">
+                                    <a class="crud-btn" asp-action="Index" asp-controller="Categories"><i class="fas fa-eye"></i> View</a>
+                                    <a class="crud-btn" asp-action="Create" asp-controller="Categories"><i class="fas fa-plus"></i> Create</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="MenuItems" asp-action="Index"><i class="fas fa-utensils"></i> Menu Items</a>
+                                <div class="crud-buttons">
+                                    <a class="crud-btn" asp-action="Index" asp-controller="MenuItems"><i class="fas fa-eye"></i> View</a>
+                                    <a class="crud-btn" asp-action="Create" asp-controller="MenuItems"><i class="fas fa-plus"></i> Create</a>
+
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index"><i class="fas fa-shopping-cart"></i> Orders</a>
+                                <div class="crud-buttons">
+                                    <a class="crud-btn" asp-action="Index" asp-controller="Orders"><i class="fas fa-eye"></i> View</a>
+                                    <a class="crud-btn" asp-action="Create" asp-controller="Orders"><i class="fas fa-plus"></i> Create</a>
+
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Tables" asp-action="Index"><i class="fas fa-chair"></i> Tables</a>
+                                <div class="crud-buttons">
+                                    <a class="crud-btn" asp-action="Index" asp-controller="Tables"><i class="fas fa-eye"></i> View</a>
+                                    <a class="crud-btn" asp-action="Create" asp-controller="Tables"><i class="fas fa-plus"></i> Create</a>
+
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Staff" asp-action="Index"><i class="fas fa-users"></i> Staff</a>
+                                <div class="crud-buttons">
+                                    <a class="crud-btn" asp-action="Index" asp-controller="Staff"><i class="fas fa-eye"></i> View</a>
+                                    <a class="crud-btn" asp-action="Create" asp-controller="Staff"><i class="fas fa-plus"></i> Create</a>
+
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Analytics" asp-action="Index"><i class="fas fa-chart-line"></i> Analytics</a>
+                                <div class="crud-buttons">
+                                    <a class="crud-btn" asp-action="Index" asp-controller="Analytics"><i class="fas fa-eye"></i> View</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content flex-grow-1">
+            <div class="container-fluid">
+                @RenderBody()
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer bg-dark text-white text-center py-3">
         <div class="container">
-            &copy; 2025 - RestaurantManagementSystem.PresentationLayer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <p>© 2025 - AdminPanel - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-white">Privacy</a></p>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+        document.getElementById('sidebarToggle')?.addEventListener('click', function () {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Toggle CRUD Submenu on Click
+        document.querySelectorAll('.nav-item .nav-link').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                const crudButtons = this.nextElementSibling;
+                if (crudButtons) {
+                    crudButtons.style.display = crudButtons.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

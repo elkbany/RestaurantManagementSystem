@@ -1,4 +1,4 @@
-﻿using Mapster;
+﻿    using Mapster;
 using Microsoft.EntityFrameworkCore;
 using RestaurantManagementSystem.Application.Contracts;
 using RestaurantManagementSystem.Application.Mapping;
@@ -6,6 +6,7 @@ using RestaurantManagementSystem.Application.Services;
 using RestaurantManagementSystem.Domain.Repositories;
 using RestaurantManagementSystem.Infrastructure.Context;
 using RestaurantManagementSystem.Infrastructure.Implementations.Base;
+using RestaurantManagementSystem.PresentationLayer.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,12 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseStaticFiles();
+
+// Use Business Hours Middleware
+//app.UseMiddleware<BusinessHoursMiddleware>();
+
+// Add Business Hours Middleware with extension method
+//app.UseBusinessHours();
 
 app.UseRouting();
 

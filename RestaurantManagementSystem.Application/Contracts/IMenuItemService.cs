@@ -1,4 +1,5 @@
 ﻿using RestaurantManagementSystem.Application.DTOs.MenuItem;
+using RestaurantManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,8 @@ namespace RestaurantManagementSystem.Application.Contracts
         public Task AddMenuItemAsync(MenuItemDto menuItemDto);
         public Task UpdateMenuItemAsync(int id, MenuItemDto menuItemDto);
         public Task DeleteMenuItemAsync(int id);
+        Task UpdateAvailabilityAsync();
+        Task ResetDailyDataAsync();
+        decimal? ApplyHappyHourDiscount(int menuItemId, decimal originalPrice);
     }
 }

@@ -19,28 +19,27 @@ namespace RestaurantManagementSystem.PresentationLayer.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await _serviceManager.CategoryService.GetAllCategoriesAsync();
-            return View(categories);
+            var activeCategories = categories.Where(c => c.IsActive && c.MenuItemCount > 0);
+            return View(activeCategories);
         }
 
         public async Task<IActionResult> Details(int id)
         {
             var category = await _serviceManager.CategoryService.GetCategoryByIdAsync(id);
-            if (category == null)
+            if (category == null || category.MenuItemCount == 0) // إخفاء لو مفيش عناصر
                 return NotFound();
             return View(category);
         }
 
         public IActionResult Create()
         {
-            return View();
+            return View(new CategoryDto());
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CategoryDto categoryDto)
         {
-            if (!ModelState.IsValid)
-                return View(categoryDto);
-
+            if (!ModelState.IsValid) return View(categoryDto);
             await _serviceManager.CategoryService.AddCategoryAsync(categoryDto);
             return RedirectToAction(nameof(Index));
         }
@@ -48,7 +47,7 @@ namespace RestaurantManagementSystem.PresentationLayer.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var category = await _serviceManager.CategoryService.GetCategoryByIdAsync(id);
-            if (category == null)
+            if (category == null || (await _serviceManager.CategoryService.GetAllCategoriesAsync()).Count(c => c.Id == id && c.MenuItemCount == 0) > 0)
                 return NotFound();
             return View(category);
         }
@@ -56,9 +55,7 @@ namespace RestaurantManagementSystem.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, CategoryDto categoryDto)
         {
-            if (!ModelState.IsValid || id != categoryDto.Id)
-                return View(categoryDto);
-
+            if (id != categoryDto.Id || !ModelState.IsValid) return NotFound();
             await _serviceManager.CategoryService.UpdateCategoryAsync(id, categoryDto);
             return RedirectToAction(nameof(Index));
         }
@@ -66,7 +63,7 @@ namespace RestaurantManagementSystem.PresentationLayer.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _serviceManager.CategoryService.GetCategoryByIdAsync(id);
-            if (category == null)
+            if (category == null || (await _serviceManager.CategoryService.GetAllCategoriesAsync()).Count(c => c.Id == id && c.MenuItemCount == 0) > 0)
                 return NotFound();
             return View(category);
         }
